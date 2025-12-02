@@ -1,0 +1,59 @@
+:root {
+  --bg: #0d0d0d;
+  --card: #111;
+  --accent: #ff1a1a;
+  --accent2: #ff4d4d;
+  --text: #fafafa;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  background: var(--card);
+}
+
+nav button {
+  background: transparent;
+  color: var(--text);
+  border: 2px solid var(--accent);
+  padding: 10px 14px;
+  margin-left: 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+nav button:hover,
+nav button.active {
+  background: var(--accent);
+}
+
+main {
+  padding: 20px;
+}
+
+.card {
+  background: var(--card);
+  padding: 20px;
+  margin-bottom: 20px;
+  border-radius: 10px;
+}
+
+.btn {
+  background: var(--accent2);
+  color: var(--text);
+  border: none;
+  padding: 8px 12px;
+  cursor: pointer;
+  border-radius: 6px;
+  margin-top: 10px;
+}
