@@ -137,6 +137,26 @@ function deleteMeal(i){let meals=storage.getMeals();meals.splice(i,1);storage.sa
 if('serviceWorker' in navigator){
     navigator.serviceWorker.register('/service-worker.js').then(()=>console.log('SW registered')).catch(()=>{});
 }
+// THEME TOGGLE
+const themeToggle = document.getElementById("themeToggle");
+
+function applyTheme(theme) {
+    if (theme === "light") {
+        document.body.classList.add("light");
+    } else {
+        document.body.classList.remove("light");
+    }
+}
+
+themeToggle.addEventListener("click", () => {
+    const current = localStorage.getItem("theme") || "dark";
+    const next = current === "dark" ? "light" : "dark";
+    localStorage.setItem("theme", next);
+    applyTheme(next);
+});
+
+// load saved theme
+applyTheme(localStorage.getItem("theme") || "dark");
 
 // Init
 showPage("dashboard");
