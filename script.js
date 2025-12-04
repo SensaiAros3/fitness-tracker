@@ -1,76 +1,14 @@
-/* ====== NAVIGATION ====== */
-
-document.querySelectorAll(".navbtn").forEach(btn => {
-    btn.addEventListener("click", () => {
-        document.querySelectorAll(".section").forEach(s => s.classList.remove("active"));
-        document.getElementById(btn.dataset.section).classList.add("active");
-    });
-});
-
-/* ====== WORKOUT LOG ====== */
-function addWorkout() {
-    const name = document.getElementById("wo_name").value;
-    const w = document.getElementById("wo_weight").value;
-
-    if (!name || !w) return;
-
-    document.getElementById("dashboardWorkout").innerText = `${name} - ${w}kg`;
-
-    const div = document.createElement("div");
-    div.classList.add("card");
-    div.innerText = `${name} - ${w}kg`;
-
-    document.getElementById("workoutList").appendChild(div);
+// -------------------- PAGE SWITCHING --------------------
+function showPage(page) {
+    document.querySelectorAll(".page").forEach(p => p.classList.add("hidden"));
+    document.getElementById(page).classList.remove("hidden");
+    localStorage.setItem("currentPage", page);
 }
 
-/* ====== MEAL LOG ====== */
-function addMeal() {
-    const name = document.getElementById("meal_name").value;
-    const p = document.getElementById("meal_protein").value;
+showPage(localStorage.getItem("currentPage") || "dashboard");
 
-    if (!name || !p) return;
 
-    document.getElementById("dashboardMeal").innerText = `${name} - ${p}g protein`;
-
-    const div = document.createElement("div");
-    div.classList.add("card");
-    div.innerText = `${name} - ${p}g protein`;
-
-    document.getElementById("mealList").appendChild(div);
-}
-
-/* ====== CALCULATIONS ====== */
-
-/* Bodyfat (US Navy formula) */
-function calcBF() {
-    const weight = parseFloat(document.getElementById("weight").value);
-    const waist = parseFloat(document.getElementById("waist").value);
-    const height = parseFloat(document.getElementById("height").value);
-
-    if (!weight || !waist || !height) {
-        document.getElementById("bfResult").innerText = "Fill all fields.";
-        return;
-    }
-
-    const bf = (495 / (1.0324 - 0.19077 * Math.log10(waist - weight) + 0.15456 * Math.log10(height))) - 450;
-
-    document.getElementById("bfResult").innerText = `Your bodyfat: ${bf.toFixed(1)}%`;
-}
-
-/* Protein target */
-function calcProtein() {
-    const w = parseFloat(document.getElementById("proteinWeight").value);
-
-    if (!w) {
-        document.getElementById("proteinResult").innerText = "Enter your weight.";
-        return;
-    }
-
-    const protein = w * 1.6;
-    document.getElementById("proteinResult").innerText = `Daily protein target: ${protein.toFixed(0)}g`;
-}
-
-/* ====== THEME TOGGLE ====== */
+// -------------------- THEME --------------------
 const themeToggle = document.getElementById("themeToggle");
 
 function applyTheme(theme) {
@@ -78,11 +16,91 @@ function applyTheme(theme) {
     else document.body.classList.remove("light");
 }
 
-themeToggle.addEventListener("click", () => {
-    const current = localStorage.getItem("theme") || "dark";
-    const next = current === "dark" ? "light" : "dark";
-    localStorage.setItem("theme", next);
-    applyTheme(next);
-});
+themeToggle.onclick = () => {
+    const now = localStorage.getItem("theme") === "light" ? "dark" : "light";
+    localStorage.setItem("theme", now);
+    applyTheme(now);
+};
 
 applyTheme(localStorage.getItem("theme") || "dark");
+
+
+// -------------------- DASHBOARD VALUES --------------------
+function quickAddWeight() {
+    let w = prompt("Enter your weight (kg)");
+    if (!w) return;
+    localStorage.setItem("weight", w);
+    document.getElementById("weightDisplay").innerText = w + " kg";
+}
+
+function quickAddProtein() {
+    let p = prompt("Enter your protein (g)");
+    if (!p) return;
+    localStorage.setItem("protein", p);
+    document.getElementById("proteinDisplay").innerText = p + " g";
+}
+
+// load saved
+document.getElementById("weightDisplay").innerText =
+    (localStorage.getItem("weight") || "Tap to set") + "";
+
+document.getElementById("proteinDisplay").innerText =
+    (localStorage.getItem("protein") || "Tap to set") + "";
+
+
+// -------------------- WORKOUTS --------------------
+function saveWorkout() {
+    let item = document.getElementById("workoutInput").value.trim();
+    if (!item) return;
+
+    let list = JSON.parse(localStorage.getItem("workouts") || "[]");
+    list.push(item);
+    localStorage.setItem("workouts", JSON.stringify(list));
+    
+    renderWorkouts();
+}
+
+function renderWorkouts() {
+    let list = JSON.parse(localStorage.getItem("workouts") || "[]");
+    document.getElementById("workoutList").innerHTML = list.join("<br>");
+}
+
+renderWorkouts();
+
+
+// -------------------- CALORIES --------------------
+function saveCalories() {
+    let c = document.getElementById("calInput").value;
+    localStorage.setItem("calories", c);
+    document.getElementById("calDisplay").innerText = c + " kcal";
+}
+
+document.getElementById("calDisplay").innerText =
+    (localStorage.getItem("calories") || "") + " kcal";
+
+
+// -------------------- BODY CALCULATIONS --------------------
+function runCalculations() {
+    let h = +height.value;
+    let w = +weight.value;
+    let waistVal = +waist.value;
+    let neckVal = +neck.value;
+    let ageVal = +age.value;
+
+    // BF% (US Navy formula)
+    let bf = 495 / (1.0324 - 0.19077 * Math.log10(waistVal - neckVal) + 0.15456 * Math.log10(h)) - 450;
+
+    // Protein target (1.8g per kg)
+    let prot = w * 1.8;
+
+    // BMR (Mifflin St Jeor)
+    let bmr = 10 * w + 6.25 * h - 5 * ageVal + 5;
+
+    // TDEE (light activity multiplier)
+    let tdee = bmr * 1.55;
+
+    bfResult.innerText = "Bodyfat: " + bf.toFixed(1) + "%";
+    proteinTarget.innerText = "Protein Target: " + prot.toFixed(0) + "g";
+    bmrResult.innerText = "BMR: " + Math.round(bmr);
+    tdeeResult.innerText = "TDEE: " + Math.round(tdee);
+}
