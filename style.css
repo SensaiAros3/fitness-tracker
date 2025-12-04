@@ -123,3 +123,17 @@ input::placeholder{color:var(--muted)}
 
 /* SWIPE hint small animation */
 .swipe-hint{opacity:0.06;font-size:12px;text-align:center;margin-top:6px}
+
+.app-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 700;
+    font-size: 1.2rem;
+}
+
+.app-logo {
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+}
