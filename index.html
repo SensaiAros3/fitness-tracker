@@ -1,226 +1,105 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
-  <title>Sand-Six</title>
-
-  <!-- Styles -->
-  <link rel="stylesheet" href="style.css">
-
-  <!-- Icons / manifest (optional) -->
-  <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
-  <link rel="manifest" href="manifest.json">
-
-  <!-- Chart.js for graphs -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sand-Six</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <header class="site-header" role="banner">
-    <div class="left">
-      <button id="menuPrev" class="icon-btn" aria-label="previous">◀</button>
-      <h1 class="brand">Sand-Six</h1>
-    </div>
+    <!-- TOP NAVBAR -->
+    <header class="topbar">
+        <div class="logo">Sand-Six</div>
 
-    <nav class="nav" role="navigation" aria-label="main navigation">
-      <button class="nav-btn" data-page="dashboard">Dashboard</button>
-      <button class="nav-btn" data-page="workouts">Workouts</button>
-      <button class="nav-btn" data-page="meals">Meals</button>
-      <button class="nav-btn" data-page="calculations">Calculations</button>
-    </nav>
+        <button id="themeToggle" class="theme-btn">☾</button>
 
-    <div class="right">
-      <button id="menuNext" class="icon-btn" aria-label="next">▶</button>
-      <button id="themeToggle" class="icon-btn" aria-label="toggle theme">☼</button>
-    </div>
-  </header>
+        <button id="navToggle" class="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
 
-  <main id="app" class="app">
+        <nav id="navMenu" class="nav-links">
+            <button data-page="dashboard">Dashboard</button>
+            <button data-page="workouts">Workouts</button>
+            <button data-page="diet">Diet</button>
+            <button data-page="weight">Daily Weight</button>
+            <button data-page="calculations">Calculations</button>
+        </nav>
+    </header>
 
-    <!-- DASHBOARD -->
-    <section id="dashboard" class="page active" aria-labelledby="dashboardTitle">
-      <div class="container">
-        <h2 id="dashboardTitle">Dashboard — Today</h2>
+    <!-- MAIN WRAPPER -->
+    <main id="app">
 
-        <div class="grid">
-          <div class="card">
-            <h3>Today — Quick Log</h3>
-            <label>Weight (kg)
-              <input id="dashWeight" type="number" step="0.1" placeholder="e.g. 75.5">
-            </label>
+        <!-- DASHBOARD -->
+        <section id="dashboard" class="page active">
+            <h1>Dashboard</h1>
+            <div class="cards">
+                <div class="card" id="latestWeight">Last Weight: —</div>
+                <div class="card" id="proteinToday">Protein Today: —</div>
+                <div class="card" id="totalWorkouts">Workouts Logged: —</div>
+            </div>
+        </section>
 
-            <label>Height (cm)
-              <input id="dashHeight" type="number" placeholder="e.g. 175">
-            </label>
+        <!-- WORKOUTS -->
+        <section id="workouts" class="page">
+            <h1>Workouts</h1>
 
-            <label>Neck (cm)
-              <input id="dashNeck" type="number" placeholder="e.g. 40">
-            </label>
-
-            <label>Waist (cm)
-              <input id="dashWaist" type="number" placeholder="e.g. 82">
-            </label>
-
-            <label>Hips (cm) — women only
-              <input id="dashHips" type="number" placeholder="e.g. 98">
-            </label>
-
-            <label>Gender
-              <select id="dashGender">
-                <option value="male">Male</option>
-                <option value="female">Female</option>
-              </select>
-            </label>
-
-            <div class="row">
-              <button id="saveDailyInfo" class="btn">Save Today</button>
-              <button id="quickWeightMinus" class="btn small">−0.1kg</button>
-              <button id="quickWeightPlus" class="btn small">+0.1kg</button>
+            <div class="input-group">
+                <input id="woName" placeholder="Workout name">
+                <input id="woWeight" placeholder="Weight (kg)" type="number">
+                <button onclick="addWorkout()">Add</button>
             </div>
 
-            <p class="muted">Calculated BF%: <strong id="bfDisplay">-</strong>%</p>
-          </div>
+            <ul id="workoutList"></ul>
+        </section>
 
-          <div class="card">
-            <h3>Quick Actions</h3>
-            <label>Meal name
-              <input id="quickMealName" placeholder="e.g. Chicken breast">
-            </label>
-            <label>Calories
-              <input id="quickMealCalories" type="number" placeholder="kcal">
-            </label>
-            <label>Protein (g)
-              <input id="quickMealProtein" type="number" placeholder="g">
-            </label>
-            <div class="row">
-              <button id="quickAddMeal" class="btn">Add Meal</button>
-              <button id="quickOpenMeals" class="btn alt">Open Meals</button>
+        <!-- DIET -->
+        <section id="diet" class="page">
+            <h1>Diet</h1>
+            <div class="input-group">
+                <input id="foodName" placeholder="Food name">
+                <input id="foodProtein" placeholder="Protein (g)" type="number">
+                <button onclick="addFood()">Add</button>
+            </div>
+            <ul id="dietList"></ul>
+        </section>
+
+        <!-- DAILY WEIGHT -->
+        <section id="weight" class="page">
+            <h1>Daily Weight</h1>
+            <div class="input-group">
+                <input id="weightInput" type="number" placeholder="Enter weight (kg)">
+                <button onclick="addWeight()">Save</button>
+            </div>
+            <ul id="weightList"></ul>
+        </section>
+
+        <!-- CALCULATIONS -->
+        <section id="calculations" class="page">
+            <h1>Calculations</h1>
+
+            <div class="card">
+                <h3>Bodyfat % (US Navy)</h3>
+                <input id="height" type="number" placeholder="Height (cm)">
+                <input id="neck" type="number" placeholder="Neck (cm)">
+                <input id="waist" type="number" placeholder="Waist (cm)">
+                <button onclick="calcBF()">Calculate</button>
+                <p id="bfResult">—</p>
             </div>
 
-            <hr />
-
-            <label>Exercise
-              <input id="quickExName" placeholder="e.g. Bench">
-            </label>
-            <label>Weight (kg)
-              <input id="quickExWeight" type="number" placeholder="kg">
-            </label>
-            <label>Reps
-              <input id="quickExReps" type="number" placeholder="reps">
-            </label>
-            <div class="row">
-              <button id="quickAddWorkout" class="btn">Add Workout</button>
-              <button id="quickOpenWorkouts" class="btn alt">Open Workouts</button>
+            <div class="card">
+                <h3>Daily Protein</h3>
+                <input id="bodyWeightProtein" type="number" placeholder="Your weight (kg)">
+                <button onclick="calcProtein()">Calculate</button>
+                <p id="proteinResult">—</p>
             </div>
-          </div>
-        </div>
 
-        <div class="grid small">
-          <div class="card">
-            <h4>Today Summary</h4>
-            <p>Calories: <span id="todayCalories">0</span> kcal</p>
-            <p>Protein: <span id="todayProtein">0</span> g</p>
-            <p>Workout volume: <span id="todayVolume">0</span> kg·reps</p>
-            <p>Max lifted: <span id="todayMax">0</span> kg</p>
-          </div>
+        </section>
 
-          <div class="card">
-            <h4>Shortcuts</h4>
-            <button id="exportCSV" class="btn">Export CSV</button>
-            <button id="clearAll" class="btn alt">Clear All Data</button>
-          </div>
-        </div>
-      </div>
-    </section>
+    </main>
 
-    <!-- WORKOUTS -->
-    <section id="workouts" class="page hidden" aria-labelledby="workoutsTitle">
-      <div class="container">
-        <h2 id="workoutsTitle">Workouts</h2>
-        <form id="workoutForm" class="card form">
-          <label>Exercise
-            <input id="exName" required>
-          </label>
-          <label>Weight (kg)
-            <input id="exWeight" type="number" required>
-          </label>
-          <label>Reps
-            <input id="exReps" type="number" required>
-          </label>
-          <div class="row">
-            <button class="btn" type="submit">Add Workout</button>
-            <button id="clearWorkouts" class="btn alt" type="button">Clear Workouts</button>
-          </div>
-        </form>
-
-        <div id="workoutList" class="list"></div>
-      </div>
-    </section>
-
-    <!-- MEALS -->
-    <section id="meals" class="page hidden" aria-labelledby="mealsTitle">
-      <div class="container">
-        <h2 id="mealsTitle">Meals</h2>
-        <form id="mealForm" class="card form">
-          <label>Meal name
-            <input id="mealName" required>
-          </label>
-          <label>Calories (kcal)
-            <input id="mealCalories" type="number" required>
-          </label>
-          <label>Protein (g)
-            <input id="mealProtein" type="number" required>
-          </label>
-          <div class="row">
-            <button class="btn" type="submit">Add Meal</button>
-            <button id="clearMeals" class="btn alt" type="button">Clear Meals</button>
-          </div>
-        </form>
-
-        <div id="mealList" class="list"></div>
-      </div>
-    </section>
-
-    <!-- CALCULATIONS & CHARTS -->
-    <section id="calculations" class="page hidden" aria-labelledby="calcTitle">
-      <div class="container">
-        <h2 id="calcTitle">Calculations & Trends</h2>
-
-        <div class="grid">
-          <div class="card">
-            <h3>Today Metrics</h3>
-            <p>Weight: <strong id="calcWeight">-</strong> kg</p>
-            <p>Bodyfat: <strong id="calcBF">-</strong>%</p>
-            <p>Lean mass: <strong id="calcLean">-</strong> kg</p>
-            <p>Fat mass: <strong id="calcFat">-</strong> kg</p>
-          </div>
-
-          <div class="card">
-            <h3>Nutrition / Training</h3>
-            <p>Calories today: <strong id="calcCalories">0</strong> kcal</p>
-            <p>Protein today: <strong id="calcProtein">0</strong> g</p>
-            <p>Protein / kg lean: <strong id="calcProteinPerKg">-</strong> g/kg</p>
-            <p>Workout volume: <strong id="calcVolume">0</strong></p>
-            <p>Max weight: <strong id="calcMax">0</strong> kg</p>
-          </div>
-        </div>
-
-        <div class="card">
-          <h3>Trends (last 30 days)</h3>
-          <div class="charts">
-            <canvas id="chartWeight" height="120"></canvas>
-            <canvas id="chartCalories" height="120"></canvas>
-            <canvas id="chartProtein" height="120"></canvas>
-          </div>
-        </div>
-
-      </div>
-    </section>
-
-  </main>
-
-  <!-- App script -->
-  <script src="script.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
