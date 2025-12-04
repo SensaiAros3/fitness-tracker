@@ -52,3 +52,16 @@ input,select{width:100%;padding:8px;margin:8px 0;border-radius:6px;border:1px so
   .btn{width:100%}
   input,select{font-size:16px}
 }
+:root {
+    --bg-color: #000;
+    --card-color: #111;
+    --text-color: #fff;
+    --accent-color: #ff3333;
+}
+
+.light {
+    --bg-color: #ffffff;
+    --card-color: #e8fafe;
+    --text-color: #000;
+    --accent-color: #00eaff;
+}
