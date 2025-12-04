@@ -1,93 +1,94 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Sand-Six</title>
-<link rel="stylesheet" href="style.css" />
-<link rel="manifest" href="/manifest.json" />
-<meta name="theme-color" content="#ff1a1a" />
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sand-Six</title>
+
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
 </head>
+
 <body>
 
-<header>
-    <h1>Sand-Six</h1>
-    <button id="themeToggle" class="btn small-btn">Toggle Theme</button>
-    <nav>
-        <button data-page="dashboard" class="active">Dashboard</button>
-        <button data-page="workouts">Workouts</button>
-        <button data-page="diet">Diet</button>
-        <button data-page="calculations">Calculations</button>
-    </nav>
-</header>
+    <header>
+        <h1>Sand-Six</h1>
 
-<main id="page-container">
-
-    <!-- Dashboard -->
-    <div id="dashboard-page" class="page">
-        <div class="card">
-            <h2>Dashboard</h2>
-            <p>Weight (kg): <input id="dashWeightInput" type="number" /></p>
-            <p>Height (cm): <input id="dashHeightInput" type="number" /></p>
-            <p>Neck (cm): <input id="dashNeckInput" type="number" /></p>
-            <p>Waist (cm): <input id="dashWaistInput" type="number" /></p>
-            <p>Hips (cm, women only): <input id="dashHipsInput" type="number" /></p>
-            <p>Gender:
-                <select id="dashGenderInput">
-                    <option value="male">Male</option>
-                    <option value="female">Female</option>
-                </select>
-            </p>
-            <button class="btn" id="saveInfoBtn">Save Info</button>
-            <p>Calculated Bodyfat: <span id="calcBodyfatDisplay">0</span>%</p>
+        <div class="nav-buttons">
+            <button class="navbtn" data-section="dashboard">Dashboard</button>
+            <button class="navbtn" data-section="workouts">Workouts</button>
+            <button class="navbtn" data-section="meals">Meals</button>
+            <button class="navbtn" data-section="calculations">Calculations</button>
         </div>
-    </div>
 
-    <!-- Workouts -->
-    <div id="workouts-page" class="page" style="display:none">
-        <h2>Workouts</h2>
-        <form id="workoutForm" class="card">
-            <input type="text" id="exerciseName" placeholder="Exercise" required />
-            <input type="number" id="exerciseWeight" placeholder="Weight (kg)" required />
-            <input type="number" id="exerciseReps" placeholder="Reps" required />
-            <button type="submit" class="btn">Add Workout</button>
-        </form>
-        <div id="workoutList" style="margin-top:20px;"></div>
-    </div>
+        <button id="themeToggle" class="btn small-btn">Toggle Theme</button>
+    </header>
 
-    <!-- Diet -->
-    <div id="diet-page" class="page" style="display:none">
-        <h2>Diet</h2>
-        <form id="mealForm" class="card">
-            <input type="text" id="mealName" placeholder="Meal Name" required />
-            <input type="number" id="mealCalories" placeholder="Calories" required />
-            <input type="number" id="mealProtein" placeholder="Protein (g)" required />
-            <button type="submit" class="btn">Add Meal</button>
-        </form>
-        <div id="mealList" style="margin-top:20px;"></div>
-    </div>
+    <!-- SECTIONS -->
 
-    <!-- Calculations -->
-    <div id="calculations-page" class="page" style="display:none">
-        <h2>Calculations</h2>
+    <section id="dashboard" class="section active">
+        <h2>Dashboard</h2>
         <div class="card">
-            <p>Weight: <span id="calcWeight">0</span> kg</p>
-            <p>Bodyfat: <span id="calcBodyfat">0</span> %</p>
-            <p>Lean Mass: <span id="calcLeanMass">0</span> kg</p>
-            <p>Fat Mass: <span id="calcFatMass">0</span> kg</p>
-            <p>Total Calories (Today): <span id="calcCalories">0</span></p>
-            <p>Total Protein (Today): <span id="calcProtein">0</span> g</p>
-            <p>Protein per kg Lean Mass: <span id="calcProteinPerKgLean">0</span> g/kg</p>
-            <p>Total Workout Volume: <span id="calcVolume">0</span> kg</p>
-            <p>Max Workout Weight: <span id="calcMaxWeight">0</span> kg</p>
-            <p>Calories per kg Bodyweight: <span id="calcCaloriesPerKg">0</span></p>
+            <p>Weight Log:</p>
+            <p id="dashboardWeight"></p>
         </div>
-    </div>
 
-</main>
+        <div class="card">
+            <p>Last Meal:</p>
+            <p id="dashboardMeal"></p>
+        </div>
 
-<script src="script.js"></script>
+        <div class="card">
+            <p>Last Workout:</p>
+            <p id="dashboardWorkout"></p>
+        </div>
+    </section>
+
+
+    <section id="workouts" class="section">
+        <h2>Log Workout</h2>
+
+        <input id="wo_name" placeholder="Workout name">
+        <input id="wo_weight" placeholder="Weight (kg)" type="number">
+        <button onclick="addWorkout()" class="btn">Add</button>
+
+        <div id="workoutList"></div>
+    </section>
+
+
+    <section id="meals" class="section">
+        <h2>Log Meal</h2>
+
+        <input id="meal_name" placeholder="Meal name">
+        <input id="meal_protein" type="number" placeholder="Protein (g)">
+        <button onclick="addMeal()" class="btn">Add</button>
+
+        <div id="mealList"></div>
+    </section>
+
+
+    <section id="calculations" class="section">
+        <h2>Body Calculations</h2>
+
+        <div class="card">
+            <h3>Bodyfat Calculator</h3>
+            <input id="age" type="number" placeholder="Age">
+            <input id="height" type="number" placeholder="Height (cm)">
+            <input id="weight" type="number" placeholder="Weight (kg)">
+            <input id="waist" type="number" placeholder="Waist (cm)">
+            <button onclick="calcBF()" class="btn">Calculate</button>
+            <p id="bfResult"></p>
+        </div>
+
+        <div class="card">
+            <h3>Daily Protein</h3>
+            <input id="proteinWeight" type="number" placeholder="Your weight (kg)">
+            <button onclick="calcProtein()" class="btn">Calculate</button>
+            <p id="proteinResult"></p>
+        </div>
+    </section>
+
+    <script src="script.js"></script>
 </body>
 </html>
