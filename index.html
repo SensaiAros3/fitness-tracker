@@ -13,6 +13,99 @@
 </head>
 <body>
 
+    <!-- TOP NAVBAR -->
+    <header class="topbar">
+        <div class="logo">Sand-Six</div>
+
+        <button id="themeToggle" class="theme-btn">☾</button>
+
+        <button id="navToggle" class="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+
+        <nav id="navMenu" class="nav-links">
+            <button data-page="dashboard">Dashboard</button>
+            <button data-page="workouts">Workouts</button>
+            <button data-page="diet">Diet</button>
+            <button data-page="weight">Daily Weight</button>
+            <button data-page="calculations">Calculations</button>
+        </nav>
+    </header>
+
+    <!-- MAIN WRAPPER -->
+    <main id="app">
+
+        <!-- DASHBOARD -->
+        <section id="dashboard" class="page active">
+            <h1>Dashboard</h1>
+            <div class="cards">
+                <div class="card" id="latestWeight">Last Weight: —</div>
+                <div class="card" id="proteinToday">Protein Today: —</div>
+                <div class="card" id="totalWorkouts">Workouts Logged: —</div>
+            </div>
+        </section>
+
+        <!-- WORKOUTS -->
+        <section id="workouts" class="page">
+            <h1>Workouts</h1>
+
+            <div class="input-group">
+                <input id="woName" placeholder="Workout name">
+                <input id="woWeight" placeholder="Weight (kg)" type="number">
+                <button onclick="addWorkout()">Add</button>
+            </div>
+
+            <ul id="workoutList"></ul>
+        </section>
+
+        <!-- DIET -->
+        <section id="diet" class="page">
+            <h1>Diet</h1>
+            <div class="input-group">
+                <input id="foodName" placeholder="Food name">
+                <input id="foodProtein" placeholder="Protein (g)" type="number">
+                <button onclick="addFood()">Add</button>
+            </div>
+            <ul id="dietList"></ul>
+        </section>
+
+        <!-- DAILY WEIGHT -->
+        <section id="weight" class="page">
+            <h1>Daily Weight</h1>
+            <div class="input-group">
+                <input id="weightInput" type="number" placeholder="Enter weight (kg)">
+                <button onclick="addWeight()">Save</button>
+            </div>
+            <ul id="weightList"></ul>
+        </section>
+
+        <!-- CALCULATIONS -->
+        <section id="calculations" class="page">
+            <h1>Calculations</h1>
+
+            <div class="card">
+                <h3>Bodyfat % (US Navy)</h3>
+                <input id="height" type="number" placeholder="Height (cm)">
+                <input id="neck" type="number" placeholder="Neck (cm)">
+                <input id="waist" type="number" placeholder="Waist (cm)">
+                <button onclick="calcBF()">Calculate</button>
+                <p id="bfResult">—</p>
+            </div>
+
+            <div class="card">
+                <h3>Daily Protein</h3>
+                <input id="bodyWeightProtein" type="number" placeholder="Your weight (kg)">
+                <button onclick="calcProtein()">Calculate</button>
+                <p id="proteinResult">—</p>
+            </div>
+
+        </section>
+
+    </main>
+
+    <script src="script.js"></script>
 <header class="topbar">
     <div class="logo">Sand-Six</div>
 
