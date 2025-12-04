@@ -1,0 +1,54 @@
+:root{
+  --bg:#000;
+  --card:#111;
+  --accent:#ff1a1a;
+  --accent2:#ff3333;
+  --text:#fff;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:Arial,Helvetica,sans-serif;
+  background:var(--bg);
+  color:var(--text);
+}
+header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:14px;
+  background:var(--card);
+  position:sticky;
+  top:0;
+  z-index:10;
+}
+header h1{margin:0;font-size:18px}
+nav{display:flex;gap:8px}
+nav button{
+  background:transparent;
+  color:var(--text);
+  border:2px solid var(--accent);
+  padding:8px 10px;
+  border-radius:8px;
+  cursor:pointer;
+}
+nav button.active, nav button:hover{
+  background:var(--accent);
+  border-color:var(--accent2);
+}
+main{padding:12px}
+.card{
+  background:var(--card);
+  padding:14px;
+  border-radius:10px;
+  margin-bottom:12px;
+  border:1px solid #222;
+}
+input,select{width:100%;padding:8px;margin:8px 0;border-radius:6px;border:1px solid #222;background:#0b0b0b;color:var(--text)}
+.btn{background:var(--accent2);border:none;padding:10px;border-radius:8px;color:var(--text);cursor:pointer;margin-top:6px;width:auto}
+@media (max-width:600px){
+  nav{flex-wrap:wrap}
+  nav button{flex:1;padding:10px;font-size:14px}
+  .btn{width:100%}
+  input,select{font-size:16px}
+}
