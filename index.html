@@ -1,94 +1,78 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sand-Six</title>
-
     <link rel="stylesheet" href="style.css">
-    <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
-    <link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
+    <link rel="icon" href="icon-192.ico">
 </head>
 
 <body>
 
-    <header>
-        <h1>Sand-Six</h1>
+<nav>
+    <a onclick="showPage('dashboard')">Dashboard</a>
+    <a onclick="showPage('workouts')">Workouts</a>
+    <a onclick="showPage('diet')">Diet</a>
+    <a onclick="showPage('calc')">Calculations</a>
+    <button id="themeToggle" class="btn">Theme</button>
+</nav>
 
-        <div class="nav-buttons">
-            <button class="navbtn" data-section="dashboard">Dashboard</button>
-            <button class="navbtn" data-section="workouts">Workouts</button>
-            <button class="navbtn" data-section="meals">Meals</button>
-            <button class="navbtn" data-section="calculations">Calculations</button>
-        </div>
+<!-- DASHBOARD -->
+<div id="dashboard" class="page">
+    <div class="card">
+        <h2>Daily Weight</h2>
+        <p id="weightDisplay" class="editable">Tap to set</p>
+        <button class="btn" onclick="quickAddWeight()">Add Today’s Weight</button>
+    </div>
 
-        <button id="themeToggle" class="btn small-btn">Toggle Theme</button>
-    </header>
+    <div class="card">
+        <h2>Daily Protein</h2>
+        <p id="proteinDisplay" class="editable">Tap to set</p>
+        <button class="btn" onclick="quickAddProtein()">Add Today’s Protein</button>
+    </div>
+</div>
 
-    <!-- SECTIONS -->
+<!-- WORKOUTS -->
+<div id="workouts" class="page hidden">
+    <div class="card">
+        <h2>Workout Log</h2>
+        <input id="workoutInput" placeholder="Bench 60kg x 8">
+        <button class="btn" onclick="saveWorkout()">Save Workout</button>
+        <p id="workoutList"></p>
+    </div>
+</div>
 
-    <section id="dashboard" class="section active">
-        <h2>Dashboard</h2>
-        <div class="card">
-            <p>Weight Log:</p>
-            <p id="dashboardWeight"></p>
-        </div>
+<!-- DIET -->
+<div id="diet" class="page hidden">
+    <div class="card">
+        <h2>Calories</h2>
+        <input id="calInput" type="number" placeholder="Enter daily calories">
+        <button class="btn" onclick="saveCalories()">Save</button>
+        <p id="calDisplay"></p>
+    </div>
+</div>
 
-        <div class="card">
-            <p>Last Meal:</p>
-            <p id="dashboardMeal"></p>
-        </div>
+<!-- CALCULATIONS -->
+<div id="calc" class="page hidden">
+    <div class="card">
+        <h2>Body Metrics</h2>
 
-        <div class="card">
-            <p>Last Workout:</p>
-            <p id="dashboardWorkout"></p>
-        </div>
-    </section>
+        <input id="height" type="number" placeholder="Height (cm)">
+        <input id="weight" type="number" placeholder="Weight (kg)">
+        <input id="waist" type="number" placeholder="Waist (cm)">
+        <input id="neck" type="number" placeholder="Neck (cm)">
+        <input id="age" type="number" placeholder="Age">
 
+        <button class="btn" onclick="runCalculations()">Calculate</button>
 
-    <section id="workouts" class="section">
-        <h2>Log Workout</h2>
+        <p id="bfResult"></p>
+        <p id="proteinTarget"></p>
+        <p id="bmrResult"></p>
+        <p id="tdeeResult"></p>
+    </div>
+</div>
 
-        <input id="wo_name" placeholder="Workout name">
-        <input id="wo_weight" placeholder="Weight (kg)" type="number">
-        <button onclick="addWorkout()" class="btn">Add</button>
+<script src="script.js"></script>
 
-        <div id="workoutList"></div>
-    </section>
-
-
-    <section id="meals" class="section">
-        <h2>Log Meal</h2>
-
-        <input id="meal_name" placeholder="Meal name">
-        <input id="meal_protein" type="number" placeholder="Protein (g)">
-        <button onclick="addMeal()" class="btn">Add</button>
-
-        <div id="mealList"></div>
-    </section>
-
-
-    <section id="calculations" class="section">
-        <h2>Body Calculations</h2>
-
-        <div class="card">
-            <h3>Bodyfat Calculator</h3>
-            <input id="age" type="number" placeholder="Age">
-            <input id="height" type="number" placeholder="Height (cm)">
-            <input id="weight" type="number" placeholder="Weight (kg)">
-            <input id="waist" type="number" placeholder="Waist (cm)">
-            <button onclick="calcBF()" class="btn">Calculate</button>
-            <p id="bfResult"></p>
-        </div>
-
-        <div class="card">
-            <h3>Daily Protein</h3>
-            <input id="proteinWeight" type="number" placeholder="Your weight (kg)">
-            <button onclick="calcProtein()" class="btn">Calculate</button>
-            <p id="proteinResult"></p>
-        </div>
-    </section>
-
-    <script src="script.js"></script>
 </body>
 </html>
