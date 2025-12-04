@@ -21,15 +21,6 @@ const storage = {
 
 function todayKey(){ return new Date().toISOString().split('T')[0]; }
 function nowDate(){ return new Date().toLocaleDateString(); }
-/* ---------- PAGE NAVIGATION ---------- */
-const pages = document.querySelectorAll(".page");
-const navButtons = document.querySelectorAll(".nav-links button");
-
-function showPage(id) {
-    pages.forEach(p => p.classList.remove("active"));
-    document.getElementById(id).classList.add("active");
-    closeMenu();
-}
 
 // ---------- Theme ----------
 const themeToggle = document.getElementById('themeToggle');
@@ -38,8 +29,6 @@ themeToggle.addEventListener('click', ()=>{
   const cur = storage.getTheme();
   const next = cur === 'dark' ? 'light' : 'dark';
   storage.setTheme(next); applyTheme(next);
-navButtons.forEach(btn => {
-    btn.addEventListener("click", () => showPage(btn.dataset.page));
 });
 applyTheme(storage.getTheme());
 
@@ -77,9 +66,6 @@ document.addEventListener('touchstart', (e)=>{
   const t = e.touches[0];
   touchStartX = t.clientX; touchStartY = t.clientY;
 }, {passive:true});
-/* ---------- NAV MENU ---------- */
-const navMenu = document.getElementById("navMenu");
-const navToggle = document.getElementById("navToggle");
 
 document.addEventListener('touchend', (e)=>{
   const t = e.changedTouches[0];
@@ -93,15 +79,12 @@ document.addEventListener('touchend', (e)=>{
     if(dx > 0 && idx > 0) showPage(pages[idx-1]);
   }
 }, {passive:true});
-function closeMenu() { navMenu.classList.remove("open"); }
 
 // Next/Prev header buttons
 document.getElementById('menuNext').addEventListener('click', ()=>{
   const active = document.querySelector('.page.active')?.id || 'dashboard';
   const idx = pages.indexOf(active);
   if(idx < pages.length-1) showPage(pages[idx+1]);
-navToggle.addEventListener("click", () => {
-    navMenu.classList.toggle("open");
 });
 document.getElementById('menuPrev').addEventListener('click', ()=>{
   const active = document.querySelector('.page.active')?.id || 'dashboard';
@@ -136,8 +119,6 @@ document.getElementById('saveDailyInfo').addEventListener('click', ()=>{
   const gender = dashGender.value || 'male';
   if(!weight || !height || !neck || !waist){ return alert('Fill weight, height, neck and waist (hips for female).'); }
   if(gender === 'female' && !hips){ return alert('Hips required for female BF calc.'); }
-/* ---------- SWIPE NAVIGATION ---------- */
-let touchX = 0;
 
   const bf = parseFloat(calcBodyfat(gender, height, neck, waist, hips).toFixed(1));
   bfDisplay.textContent = bf.toFixed(1);
@@ -145,8 +126,6 @@ let touchX = 0;
   storage.saveDailyInfo(todayKey(), infoObj);
   updateCalculations();
   toast('Saved today');
-document.addEventListener("touchstart", e => {
-    touchX = e.changedTouches[0].screenX;
 });
 
 // quick +/- weight
@@ -156,8 +135,6 @@ document.getElementById('quickWeightPlus').addEventListener('click', ()=> {
 document.getElementById('quickWeightMinus').addEventListener('click', ()=> {
   dashWeight.value = Math.max(0, (parseFloat(dashWeight.value || 0) - 0.1)).toFixed(1);
 });
-document.addEventListener("touchend", e => {
-    let diff = e.changedTouches[0].screenX - touchX;
 
 // quick add meal
 document.getElementById('quickAddMeal').addEventListener('click', ()=>{
@@ -167,8 +144,6 @@ document.getElementById('quickAddMeal').addEventListener('click', ()=>{
   if(!calories && !protein) return toast('Add calories or protein first');
   const arr = storage.getMeals(); arr.push({ name, calories, protein, date: todayKey() }); storage.saveMeals(arr);
   toast('Meal added'); updateCalculations();
-    if (diff > 70) navMenu.classList.add("open");
-    if (diff < -70) closeMenu();
 });
 
 // quick add workout
@@ -180,50 +155,14 @@ document.getElementById('quickAddWorkout').addEventListener('click', ()=>{
   const arr = storage.getWorkouts(); arr.push({ exercise: ex, weight: wt, reps, date: todayKey() }); storage.saveWorkouts(arr);
   toast('Workout added'); updateCalculations();
 });
-/* ---------- THEME TOGGLE ---------- */
-const themeToggle = document.getElementById("themeToggle");
-
-function applyTheme(theme) {
-    if (theme === "light") {
-        document.body.classList.add("light");
-        themeToggle.textContent = "☀";
-    } else {
-        document.body.classList.remove("light");
-        themeToggle.textContent = "☾";
-    }
-}
 
 // quick open pages
 document.getElementById('quickOpenMeals').addEventListener('click', ()=> showPage('meals'));
 document.getElementById('quickOpenWorkouts').addEventListener('click', ()=> showPage('workouts'));
-themeToggle.addEventListener("click", () => {
-    const current = localStorage.getItem("theme") || "dark";
-    const next = current === "dark" ? "light" : "dark";
-    localStorage.setItem("theme", next);
-    applyTheme(next);
-});
-applyTheme(localStorage.getItem("theme"));
-
-/* ---------- DATA STORAGE ---------- */
-let workouts = JSON.parse(localStorage.getItem("workouts") || "[]");
-let diet = JSON.parse(localStorage.getItem("diet") || "[]");
-let weight = JSON.parse(localStorage.getItem("weight") || "[]");
-
-function saveAll() {
-    localStorage.setItem("workouts", JSON.stringify(workouts));
-    localStorage.setItem("diet", JSON.stringify(diet));
-    localStorage.setItem("weight", JSON.stringify(weight));
-    updateDashboard();
-}
 
 // ---------- Workouts form ----------
 const workoutForm = document.getElementById('workoutForm');
 const workoutList = document.getElementById('workoutList');
-/* ---------- WORKOUTS ---------- */
-function addWorkout() {
-    let name = woName.value;
-    let w = Number(woWeight.value);
-    if (!name || !w) return;
 
 function renderWorkouts(){
   const arr = storage.getWorkouts();
@@ -250,9 +189,6 @@ function renderWorkouts(){
       const arr = storage.getWorkouts(); arr.splice(i,1); storage.saveWorkouts(arr); renderWorkouts(); updateCalculations();
     });
   });
-    workouts.push({ name, w });
-    saveAll();
-    renderWorkouts();
 }
 workoutForm.addEventListener('submit', e=>{
   e.preventDefault();
@@ -289,12 +225,6 @@ function renderMeals(){
     btn.addEventListener('click', ()=>{
       const i = parseInt(btn.dataset.i);
       const arr = storage.getMeals(); arr.splice(i,1); storage.saveMeals(arr); renderMeals(); updateCalculations();
-function renderWorkouts() {
-    workoutList.innerHTML = "";
-    workouts.forEach(w => {
-        let li = document.createElement("li");
-        li.textContent = `${w.name}: ${w.w} kg`;
-        workoutList.appendChild(li);
     });
   });
 }
@@ -309,15 +239,9 @@ mealForm.addEventListener('submit', e=>{
 });
 document.getElementById('clearMeals').addEventListener('click', ()=> { if(confirm('Clear all meals?')){ storage.saveMeals([]); renderMeals(); updateCalculations(); } });
 renderMeals();
-renderWorkouts();
 
 // ---------- Calculations & Charts ----------
 let chartWeight=null, chartCalories=null, chartProtein=null;
-/* ---------- DIET ---------- */
-function addFood() {
-    let name = foodName.value;
-    let p = Number(foodProtein.value);
-    if (!name || !p) return;
 
 function buildDateArray(days=30){
   const a=[];
@@ -328,9 +252,6 @@ function buildDateArray(days=30){
     a.push(d.toISOString().split('T')[0]);
   }
   return a;
-    diet.push({ name, p });
-    saveAll();
-    renderDiet();
 }
 
 function aggregateByDate(arr, dateKey='date', valueKey){
@@ -342,15 +263,7 @@ function aggregateByDate(arr, dateKey='date', valueKey){
     map[date] = (map[date] || 0) + val;
   });
   return map;
-function renderDiet() {
-    dietList.innerHTML = "";
-    diet.forEach(f => {
-        let li = document.createElement("li");
-        li.textContent = `${f.name}: ${f.p}g protein`;
-        dietList.appendChild(li);
-    });
 }
-renderDiet();
 
 function updateCharts(){
   const dates = buildDateArray(30);
@@ -358,10 +271,6 @@ function updateCharts(){
   const meals = storage.getMeals();
   const mealsCals = aggregateByDate(meals, 'date', 'calories');
   const mealsProt = aggregateByDate(meals, 'date', 'protein');
-/* ---------- DAILY WEIGHT ---------- */
-function addWeight() {
-    let w = Number(weightInput.value);
-    if (!w) return;
 
   const wData = dates.map(d=>{
     const info = dailyInfo[d];
@@ -406,10 +315,6 @@ function addWeight() {
     chartCalories.data.datasets[0].data = cData;
     chartCalories.update();
   }
-    weight.push(w);
-    saveAll();
-    renderWeight();
-}
 
   // protein chart
   if(!chartProtein){
@@ -417,12 +322,6 @@ function addWeight() {
       type:'bar',
       data:{ labels:dates, datasets:[{ label:'Protein (g)', data:pData, backgroundColor: getComputedStyle(document.documentElement).getPropertyValue('--accent').trim() || '#00eaff' }] },
       options:{scales:{x:{display:false}}, plugins:{legend:{display:false}}}
-function renderWeight() {
-    weightList.innerHTML = "";
-    weight.forEach(w => {
-        let li = document.createElement("li");
-        li.textContent = `${w} kg`;
-        weightList.appendChild(li);
     });
   } else {
     chartProtein.data.labels = dates;
@@ -430,7 +329,6 @@ function renderWeight() {
     chartProtein.update();
   }
 }
-renderWeight();
 
 function updateCalculations(){
   const info = storage.getInfoByDate(todayKey()) || {};
@@ -463,13 +361,7 @@ function updateCalculations(){
   document.getElementById('todayMax').textContent = workouts.filter(w => w.date === todayKey()).reduce((s,w)=> Math.max(s, w.weight || 0), 0);
 
   updateCharts();
-/* ---------- DASHBOARD ---------- */
-function updateDashboard() {
-    latestWeight.textContent = `Last Weight: ${weight.at(-1) || "—"}`;
-    proteinToday.textContent = `Protein Today: ${diet.reduce((x, y) => x + y.p, 0)}g`;
-    totalWorkouts.textContent = `Workouts Logged: ${workouts.length}`;
 }
-updateDashboard();
 
 // ---------- Export CSV ----------
 function exportCSV(){
@@ -477,11 +369,6 @@ function exportCSV(){
   const meals = storage.getMeals();
   const workouts = storage.getWorkouts();
   const info = storage.getDailyInfo();
-/* ---------- CALCULATIONS ---------- */
-function calcBF() {
-    let h = height.value;
-    let n = neck.value;
-    let w = waist.value;
 
   let rows = [['type','date','name','calories','protein','exercise','weight','reps','weight_kg','bodyfat']];
   meals.forEach(m => rows.push(['meal', m.date, m.name, m.calories, m.protein, '', '', '', '', '']));
@@ -490,7 +377,6 @@ function calcBF() {
     const it = info[d];
     rows.push(['daily', d, '', '', '', '', '', '', it.weight || '', it.bodyfat || '']);
   });
-    if (!h || !n || !w) return;
 
   const csv = rows.map(r=> r.map(v=> `"${String(v||'').replace(/"/g,'""')}"`).join(',')).join('\\n');
   const blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
@@ -498,8 +384,6 @@ function calcBF() {
   const a = document.createElement('a');
   a.href = url; a.download = 'sand_six_data.csv'; a.click();
   URL.revokeObjectURL(url);
-    let bf = 495 / (1.0324 - 0.19077 * Math.log10(w - n) + 0.15456 * Math.log10(h)) - 450;
-    bfResult.textContent = `Bodyfat: ${bf.toFixed(1)}%`;
 }
 document.getElementById('exportCSV').addEventListener('click', exportCSV);
 
@@ -534,12 +418,8 @@ function escapeHtml(s){ return String(s).replace(/[&<>"']/g, c=>({ '&':'&amp;','
   if(info.bodyfat) bfDisplay.textContent = info.bodyfat;
   renderMeals(); renderWorkouts(); updateCalculations();
 })();
-function calcProtein() {
-    let bw = Number(bodyWeightProtein.value);
-    if (!bw) return;
 
 // ---------- service worker register (optional file) ----------
 if('serviceWorker' in navigator){
   navigator.serviceWorker.register('/service-worker.js').catch(()=>{ /* ignore */ });
-    proteinResult.textContent = `Recommended: ${Math.round(bw * 1.6)}g`;
 }
